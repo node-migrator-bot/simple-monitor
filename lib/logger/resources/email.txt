@@ -1,0 +1,5 @@
+<% print(type.toUpperCase()); %>
+Message: <%= message %>
+Dump: <%= dump %>
+
+Send: <%= date %>
