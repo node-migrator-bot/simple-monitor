@@ -17,12 +17,17 @@ module.exports = (monitorConfig, config, message, object, type, callback) ->
 	    	text += "\n"
 	    text += "\n"
 	    
-	# Open file for write
-	fd = fs.openSync(config.file, 'a', 0o644);
-
+	    
 	# Write log message to file
-	buffer = new Buffer createMessage(message, object, type)
-	fs.write fd, buffer, 0, buffer.length, null, ->
-		fs.close fd
-		callback()
+	fs.open config.file, 'a', 0o644, (error, fd) ->
+		if error
+			callback error
+			return
 	
+		buffer = new Buffer createMessage(message, object, type)
+		fs.write fd, buffer, 0, buffer.length, null, (error, written) ->
+			if error
+				callback error
+				return
+
+			fs.close fd, callback
